@@ -8,7 +8,7 @@ An intelligent observability platform that leverages AI agents to automatically 
 
 ## 🚀 Overview
 
-This project is designed to simulate a modern monitoring system enhanced with AI capabilities.  
+This project simulates a modern monitoring system enhanced with AI capabilities.  
 It combines a **.NET backend**, an **AI Agent built using Google ADK**, and an **Angular dashboard** to provide automated debugging insights.
 
 The system goes beyond traditional logging tools by introducing **agent-based reasoning** to understand and explain system failures.
@@ -23,98 +23,130 @@ The system follows a modular architecture with clear separation of concerns:
   - Log ingestion API
   - Data storage and management
   - Orchestration of AI workflows
-  - Background processing
+  - Background processing (Worker Service)
 
 - **AI Agent (Google ADK)**
   - Log analysis and clustering
   - Root cause analysis
   - Anomaly detection
-  - Intelligent suggestions
+  - Intelligent insights generation
 
 - **Angular Frontend**
   - Dashboard for log visualization
-  - Error trends and insights
-  - AI-generated analysis display
+  - Error trends and analytics
+  - AI-generated insights display
 
 ---
 
 ## 🔄 Workflow
 
-1. Application logs are sent to the .NET API  
+1. Applications send error logs to the .NET API  
 2. Logs are stored in the database  
-3. The system triggers the AI agent for analysis  
-4. The agent processes logs using multi-step reasoning  
-5. Results are returned as structured insights  
-6. Insights are displayed on the dashboard  
+3. Background worker retrieves logs periodically  
+4. Logs are sent to the AI Agent for analysis  
+5. The agent processes logs using multi-step reasoning  
+6. Structured insights are returned and stored  
+7. Insights are displayed on the Angular dashboard  
 
 ---
 
-## 🧠 AI Capabilities
+## 🧠 AI Agent Capabilities
 
-- 🔍 Error clustering and pattern detection  
-- ⚠️ Anomaly detection in log streams  
-- 🧩 Root cause analysis with confidence scoring  
-- 💡 Suggested fixes and insights  
-- 🔁 Multi-step reasoning using tool-based execution  
+The AI Agent transforms raw logs into meaningful insights using advanced analysis techniques:
 
----
-
-## 🧰 Tech Stack
-
-- **Backend:** .NET (Web API)
-- **Frontend:** Angular
-- **AI Layer:** Google ADK (Agent Development Kit)
-- **Storage:** (SQL / NoSQL - configurable)
-- **Background Jobs:** (e.g., Hangfire - optional)
+### 🔍 Log Processing & Understanding
+- Parse and normalize structured/unstructured logs  
+- Extract key metadata (service, endpoint, exception, timestamp, traceId)  
+- Preprocess logs for analysis  
 
 ---
 
-## 🧩 Key Concepts
-
-- Agentic AI  
-- Tool-based reasoning  
-- Separation of concerns  
-- Observability & monitoring systems  
-- Distributed system thinking  
+### 📊 Error Grouping & Clustering
+- Group similar errors by patterns and stack traces  
+- Aggregate repeated issues with occurrence counts  
+- Detect recurring error signatures  
 
 ---
 
-## 📊 Features (In Progress)
-
-- Real-time log ingestion  
-- AI-powered log analysis  
-- Interactive dashboard  
-- Error trend visualization  
-- Intelligent alerting system  
+### 📈 Trend & Pattern Analysis
+- Analyze error frequency over time  
+- Detect time-based patterns and trends  
+- Identify affected services and endpoints  
 
 ---
 
-## 🎯 Future Enhancements
-
-- Multi-agent architecture  
-- Integration with CI/CD pipelines  
-- Advanced anomaly detection using ML models  
-- Alerting & notification system  
-- Performance optimization & scaling  
+### ⚠️ Anomaly & Spike Detection
+- Detect sudden spikes in error rates  
+- Identify abnormal system behavior  
+- Highlight critical incidents  
 
 ---
 
-## 📌 Inspiration
-
-This project is inspired by modern observability platforms such as:
-- Datadog  
-- Sentry  
-
-with an added focus on **AI-driven automation and reasoning**.
-
----
-
-## 🤝 Contributing
-
-This is a personal project, but suggestions and ideas are welcome.
+### 🔗 Correlation Analysis
+- Correlate errors with:
+  - Services  
+  - API endpoints  
+  - Time windows  
+- Identify relationships between failures  
 
 ---
 
-## 📄 License
+### 🧩 Root Cause Analysis
+- Infer potential root causes of issues  
+- Provide reasoning based on log patterns  
+- Explain why errors are occurring  
 
-MIT License
+---
+
+### 💡 Intelligent Insights & Summarization
+- Generate human-readable summaries  
+- Convert large log volumes into concise insights  
+- Highlight key system issues  
+
+---
+
+### 🚨 Issue Prioritization
+- Rank issues based on impact and frequency  
+- Classify severity (High / Medium / Low)  
+
+---
+
+### 🛠️ Suggested Fixes
+- Recommend possible solutions  
+- Provide actionable debugging steps  
+- Suggest performance improvements  
+
+---
+
+### 📊 Confidence Scoring
+- Assign confidence levels to analysis results  
+- Indicate uncertainty in root cause detection  
+
+---
+
+### 🧠 Context-Aware Analysis (Advanced)
+- Detect issues related to deployments  
+- Understand service dependencies  
+- Track issue evolution over time  
+
+---
+
+### 🔁 Continuous Learning (Future)
+- Learn from previously resolved issues  
+- Improve analysis accuracy  
+- Build a knowledge base  
+
+---
+
+### 📦 Structured Output Example
+
+```json
+{
+  "issue": "Database timeout in OrderService",
+  "count": 120,
+  "affectedEndpoints": ["/api/orders"],
+  "rootCause": "High database latency",
+  "confidence": 0.85,
+  "suggestedFix": "Optimize queries and increase connection pool",
+  "severity": "High"
+}
