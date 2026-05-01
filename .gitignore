@@ -39,6 +39,20 @@ ScaffoldingReadMe.txt
 # dotenv environment variables file
 .env
 
+# Local documentation (not tracked)
+DOCUMENTATION.md
+
+# Claude Code workspace
+.claude/
+
+# Visual Studio cache
+.vs/
+
+# Python venv / caches
+.venv/
+__pycache__/
+*.pyc
+
 # Others
 ~$*
 *~
