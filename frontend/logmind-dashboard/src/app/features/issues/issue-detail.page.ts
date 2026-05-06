@@ -49,22 +49,13 @@ import { RelativeTimePipe } from '../../shared/pipes/relative-time.pipe';
             </div>
           </div>
 
-          <div class="flex items-center gap-2">
-            <a [routerLink]="['/logs']" [queryParams]="{ issueId: i.id }"
-               class="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-slate-200 transition hover:bg-white/[0.07]">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3.5 w-3.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10" />
-              </svg>
-              View all logs
-            </a>
-            <button type="button" (click)="retry(i.id)"
-                    class="inline-flex items-center gap-1.5 rounded-lg border border-violet-500/30 bg-violet-500/10 px-3 py-1.5 text-xs font-medium text-violet-200 transition hover:bg-violet-500/20">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3.5 w-3.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h5M20 20v-5h-5M5 19a9 9 0 0 0 14.85-3.36M19 5a9 9 0 0 0-14.85 3.36" />
-              </svg>
-              Re-analyze
-            </button>
-          </div>
+          <a [routerLink]="['/logs']" [queryParams]="{ issueId: i.id }"
+             class="inline-flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-slate-200 transition hover:bg-white/[0.07]">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-3.5 w-3.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h10" />
+            </svg>
+            View all logs
+          </a>
         </div>
       </div>
 
@@ -222,7 +213,4 @@ export class IssueDetailPage {
     });
   }
 
-  protected retry(id: string) {
-    this.analysisApi.retry(id).subscribe();
-  }
 }
