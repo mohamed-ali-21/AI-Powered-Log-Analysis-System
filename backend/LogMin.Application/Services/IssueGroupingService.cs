@@ -1,4 +1,5 @@
-﻿using LogMin.Infrastructure.Abstractions.Intelligence;
+﻿using LogMin.Application.Services.Abstruction;
+using LogMin.Infrastructure.Abstractions.Intelligence;
 using LogMin.Infrastructure.Abstractions.Persistence;
 using LogMin.Infrastructure.Persistence.Entities;
 

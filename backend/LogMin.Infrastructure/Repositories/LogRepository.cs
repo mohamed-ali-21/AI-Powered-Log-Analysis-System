@@ -43,6 +43,9 @@ public sealed class LogRepository : ILogRepository
         if (!string.IsNullOrEmpty(filter.Pattern))
             q = q.Where(x => x.Pattern == filter.Pattern);
 
+        if (filter.IssueId.HasValue)
+            q = q.Where(x => x.IssueId == filter.IssueId.Value);
+
         if (filter.From.HasValue)
             q = q.Where(x => x.Timestamp >= filter.From.Value);
 

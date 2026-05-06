@@ -12,6 +12,7 @@ public sealed class AppDbContext : DbContext
     public DbSet<Log> Logs => Set<Log>();
     public DbSet<Issue> Issues => Set<Issue>();
     public DbSet<IssueAnalysis> IssueAnalyses => Set<IssueAnalysis>();
+    public DbSet<AgentSetting> AgentSettings => Set<AgentSetting>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

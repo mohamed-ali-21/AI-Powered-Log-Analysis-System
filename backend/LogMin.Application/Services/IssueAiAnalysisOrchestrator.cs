@@ -1,5 +1,5 @@
-﻿using System.Text.Json;
-using LogMin.Infrastructure.Abstractions.Intelligence;
+using System.Text.Json;
+using LogMin.Application.Services.Abstruction;
 using LogMin.Infrastructure.Abstractions.Persistence;
 using LogMin.Infrastructure.Persistence.Entities;
 using Microsoft.Extensions.Logging;
@@ -12,13 +12,13 @@ public sealed class IssueAiAnalysisOrchestrator : IIssueAiAnalysisOrchestrator
 
     private readonly IIssueRepository _issues;
     private readonly IIssueAnalysisRepository _analyses;
-    private readonly IIssueAnalysisAgentClient _agent;
+    private readonly IIssueAnalysisAgent _agent;
     private readonly ILogger<IssueAiAnalysisOrchestrator> _logger;
 
     public IssueAiAnalysisOrchestrator(
         IIssueRepository issues,
         IIssueAnalysisRepository analyses,
-        IIssueAnalysisAgentClient agent,
+        IIssueAnalysisAgent agent,
         ILogger<IssueAiAnalysisOrchestrator> logger)
     {
         _issues = issues;
@@ -32,12 +32,6 @@ public sealed class IssueAiAnalysisOrchestrator : IIssueAiAnalysisOrchestrator
         var pending = await _issues.GetPendingAiAnalysisAsync(batchSize, cancellationToken);
         if (pending.Count == 0) return 0;
 
-        if (!await _agent.IsHealthyAsync(cancellationToken))
-        {
-            _logger.LogWarning("Agent health probe failed; skipping cycle ({Pending} issue(s) remain pending).", pending.Count);
-            return 0;
-        }
-
         var processed = 0;
         for (var i = 0; i < pending.Count; i++)
         {
@@ -48,28 +42,18 @@ public sealed class IssueAiAnalysisOrchestrator : IIssueAiAnalysisOrchestrator
             {
                 var sampleLogs = await _issues.GetRecentLogMessagesAsync(issue.Id, SampleLogCount, cancellationToken);
 
-                var request = new IssueAnalysisAgentRequest(
-                    IssueId: issue.Id.ToString(),
-                    Pattern: issue.Pattern,
-                    ServiceName: issue.ServiceName,
-                    LogsCount: issue.Count,
-                    AvgScore: issue.AvgScore,
-                    SampleLogs: sampleLogs,
-                    TimeWindow: $"{issue.FirstSeen:O}..{issue.LastSeen:O}",
-                    RelatedServices: Array.Empty<string>());
-
-                var response = await _agent.AnalyzeAsync(request, cancellationToken);
+                var result = await _agent.AnalyzeAsync(issue, sampleLogs, cancellationToken);
 
                 var analysis = new IssueAnalysis
                 {
                     Id = Guid.NewGuid(),
                     IssueId = issue.Id,
-                    RootCause = response.RootCause,
-                    Impact = response.Impact,
-                    Severity = response.Severity,
-                    Recommendation = JsonSerializer.Serialize(response.Recommendations),
-                    Summary = response.Summary,
-                    Tags = JsonSerializer.Serialize(response.Tags),
+                    RootCause = result.RootCause,
+                    Impact = result.Impact,
+                    Severity = result.Severity,
+                    Recommendation = JsonSerializer.Serialize(result.Recommendations),
+                    Summary = result.Summary,
+                    Tags = JsonSerializer.Serialize(result.Tags),
                     CreatedAt = DateTime.UtcNow
                 };
 

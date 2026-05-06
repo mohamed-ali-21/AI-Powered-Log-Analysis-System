@@ -1,6 +1,7 @@
 ﻿using LogMin.Infrastructure.Abstractions.Persistence;
 using LogMin.Application.DTOs.Common;
 using LogMin.Application.DTOs.Issues;
+using LogMin.Application.Services.Abstruction;
 using LogMin.Infrastructure.Persistence.Entities;
 
 namespace LogMin.Application.Services;

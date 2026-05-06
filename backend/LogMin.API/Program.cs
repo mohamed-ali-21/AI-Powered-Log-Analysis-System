@@ -1,20 +1,32 @@
-﻿using LogMin.Infrastructure.Abstractions.Intelligence;
-using LogMin.Infrastructure.Abstractions.Persistence;
 using LogMin.Application.Services;
-using LogMin.Infrastructure.ExternalServices;
+using LogMin.Application.Services.Abstruction;
+using LogMin.Infrastructure.Abstractions.Intelligence;
+using LogMin.Infrastructure.Abstractions.Persistence;
 using LogMin.Infrastructure.Persistence;
 using LogMin.Infrastructure.Repositories;
 using LogMin.Worker.BackgroundServices;
 using LogMin.Worker.Configuration;
+using LogMin.Worker.Intelligence;
 using LogMin.Worker.LogIntelligence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpClient();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.SetIsOriginAllowed(_ => true)
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
+    });
+});
 
 var connectionString = builder.Configuration.GetConnectionString("LogMindDb")
     ?? throw new InvalidOperationException("Connection string 'LogMindDb' is not configured.");
@@ -29,6 +41,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<ILogRepository, LogRepository>();
 builder.Services.AddScoped<IIssueRepository, IssueRepository>();
 builder.Services.AddScoped<IIssueAnalysisRepository, IssueAnalysisRepository>();
+builder.Services.AddScoped<IAgentSettingRepository, AgentSettingRepository>();
 
 builder.Services.AddScoped<ILogIngestionService, LogIngestionService>();
 builder.Services.AddScoped<IIssueGroupingService, IssueGroupingService>();
@@ -36,35 +49,19 @@ builder.Services.AddScoped<IIssueAiAnalysisOrchestrator, IssueAiAnalysisOrchestr
 builder.Services.AddScoped<ILogQueryService, LogQueryService>();
 builder.Services.AddScoped<IIssueQueryService, IssueQueryService>();
 builder.Services.AddScoped<IIssueAnalysisQueryService, IssueAnalysisQueryService>();
+builder.Services.AddScoped<IAgentSettingsService, AgentSettingsService>();
 
 builder.Services.Configure<LogProcessingOptions>(
     builder.Configuration.GetSection(LogProcessingOptions.SectionName));
 builder.Services.Configure<IssueAnalysisOptions>(
     builder.Configuration.GetSection(IssueAnalysisOptions.SectionName));
+builder.Services.Configure<IssueAnalysisAgentOptions>(
+    builder.Configuration.GetSection(IssueAnalysisAgentOptions.SectionName));
 
 builder.Services.AddSingleton<LogIntelligenceWorker>();
 builder.Services.AddScoped<ILogAnalyzer, LogIntelligenceAnalyzer>();
 
-builder.Services.AddSingleton(sp =>
-{
-    var opts = sp.GetRequiredService<IOptions<IssueAnalysisOptions>>().Value;
-    var agent = opts.GetDefaultAgent();
-    return new IssueAnalysisAgentClientSettings
-    {
-        AppName = agent.AppName,
-        UserId = agent.UserId,
-        ListAppsPath = agent.ListAppsPath,
-        RunPath = agent.RunPath,
-        MaxRetries = agent.MaxRetries
-    };
-});
-
-builder.Services.AddHttpClient<IIssueAnalysisAgentClient, IssueAnalysisAgentClient>((sp, client) =>
-{
-    var agent = sp.GetRequiredService<IOptions<IssueAnalysisOptions>>().Value.GetDefaultAgent();
-    client.BaseAddress = new Uri(agent.BaseUrl);
-    client.Timeout = TimeSpan.FromSeconds(agent.RequestTimeoutSeconds);
-});
+builder.Services.AddScoped<IIssueAnalysisAgent, IssueAnalysisAgent>();
 
 builder.Services.AddHealthChecks();
 
@@ -86,6 +83,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors();
 app.UseAuthorization();
 app.MapControllers();
 app.MapHealthChecks("/health");

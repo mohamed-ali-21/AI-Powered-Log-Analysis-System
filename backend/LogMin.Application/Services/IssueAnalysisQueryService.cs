@@ -2,6 +2,7 @@
 using LogMin.Infrastructure.Abstractions.Persistence;
 using LogMin.Application.DTOs.AiAnalysis;
 using LogMin.Application.DTOs.Common;
+using LogMin.Application.Services.Abstruction;
 using LogMin.Infrastructure.Persistence.Entities;
 using Microsoft.Extensions.Logging;
 

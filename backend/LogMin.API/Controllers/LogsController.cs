@@ -1,7 +1,7 @@
 using LogMin.Application.DTOs;
 using LogMin.Application.DTOs.Common;
 using LogMin.Application.DTOs.Logs;
-using LogMin.Application.Services;
+using LogMin.Application.Services.Abstruction;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LogMin.API.Controllers;

@@ -18,6 +18,7 @@ public interface ILogRepository
 public sealed record LogFilter(
     string? ServiceName,
     string? Pattern,
+    Guid? IssueId,
     DateTime? From,
     DateTime? To,
     int Skip,

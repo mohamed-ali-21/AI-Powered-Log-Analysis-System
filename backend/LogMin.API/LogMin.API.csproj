@@ -18,7 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\LogMin.Application\LogMin.Application.csproj" />
     <ProjectReference Include="..\LogMin.Infrastructure\LogMin.Infrastructure.csproj" />
-    <ProjectReference Include="..\WorkerService1\LogMin.Worker.csproj" />
+    <ProjectReference Include="..\LogMin.Worker\LogMin.Worker.csproj" />
   </ItemGroup>
 
 </Project>

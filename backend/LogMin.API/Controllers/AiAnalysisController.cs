@@ -1,6 +1,6 @@
 using LogMin.Application.DTOs.AiAnalysis;
 using LogMin.Application.DTOs.Common;
-using LogMin.Application.Services;
+using LogMin.Application.Services.Abstruction;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LogMin.API.Controllers;

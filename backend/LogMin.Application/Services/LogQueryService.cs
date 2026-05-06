@@ -2,6 +2,7 @@
 using LogMin.Application.DTOs.Common;
 using LogMin.Application.DTOs.Logs;
 using LogMin.Infrastructure.Persistence.Entities;
+using LogMin.Application.Services.Abstruction;
 
 namespace LogMin.Application.Services;
 
@@ -21,6 +22,7 @@ public sealed class LogQueryService : ILogQueryService
         var filter = new LogFilter(
             ServiceName: NullIfBlank(query.ServiceName),
             Pattern: NullIfBlank(query.Pattern),
+            IssueId: query.IssueId,
             From: query.From,
             To: query.To,
             Skip: skip,

@@ -1,0 +1,79 @@
+<div class="flex h-screen overflow-hidden">
+  <!-- Sidebar -->
+  <aside class="hidden md:flex w-60 shrink-0 flex-col border-r border-white/5 bg-[#0a0d18]/80 backdrop-blur-xl">
+    <div class="flex items-center gap-2.5 px-5 py-5 border-b border-white/5">
+      <div class="relative grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-violet-500 to-cyan-400 text-white shadow-lg shadow-violet-500/30">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-5 w-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0Zm9-5v5l3 2" />
+        </svg>
+        <span class="absolute -inset-1 rounded-xl bg-gradient-to-br from-violet-500/40 to-cyan-400/40 blur-md -z-10"></span>
+      </div>
+      <div class="leading-tight">
+        <p class="text-sm font-semibold text-white">LogMind</p>
+        <p class="text-[10px] uppercase tracking-wider text-slate-500">Log Intelligence</p>
+      </div>
+    </div>
+
+    <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+      <p class="px-3 mb-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-slate-500">Navigation</p>
+      @for (item of nav; track item.path) {
+        <a [routerLink]="item.path"
+           [routerLinkActive]="'!bg-violet-500/15 !text-white !ring-1 !ring-violet-500/30'"
+           [routerLinkActiveOptions]="{ exact: !!item.exact }"
+           class="group relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-400 transition hover:bg-white/[0.04] hover:text-slate-100">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" class="h-4 w-4 shrink-0">
+            <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="item.iconPath" />
+          </svg>
+          <span class="flex-1">{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+
+    <div class="px-3 py-3 border-t border-white/5">
+      <a [routerLink]="settingsNav.path"
+         [routerLinkActive]="'!bg-violet-500/15 !text-white !ring-1 !ring-violet-500/30'"
+         class="group flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-400 transition hover:bg-white/[0.04] hover:text-slate-100">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" class="h-4 w-4 shrink-0">
+          <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="settingsNav.iconPath" />
+        </svg>
+        <span class="flex-1">{{ settingsNav.label }}</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <div class="flex flex-1 min-w-0 flex-col">
+    <!-- Mobile top bar -->
+    <header class="md:hidden shrink-0 border-b border-white/5 bg-[#0a0d18]/80 backdrop-blur-xl">
+      <div class="flex items-center justify-between gap-4 px-4 py-3">
+        <a routerLink="/" class="flex items-center gap-2">
+          <div class="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-violet-500 to-cyan-400 text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="h-4 w-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0Zm9-5v5l3 2" />
+            </svg>
+          </div>
+          <span class="text-sm font-semibold text-white">LogMind</span>
+        </a>
+        <nav class="flex items-center gap-1 overflow-x-auto">
+          @for (item of nav; track item.path) {
+            <a [routerLink]="item.path"
+               [routerLinkActive]="'!bg-white/10 !text-white'"
+               [routerLinkActiveOptions]="{ exact: !!item.exact }"
+               class="rounded-md px-2.5 py-1 text-xs text-slate-300 transition hover:bg-white/5">
+              {{ item.label }}
+            </a>
+          }
+          <a [routerLink]="settingsNav.path"
+             [routerLinkActive]="'!bg-white/10 !text-white'"
+             class="rounded-md px-2.5 py-1 text-xs text-slate-300 transition hover:bg-white/5">
+            {{ settingsNav.label }}
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="flex flex-1 min-h-0 flex-col">
+      <router-outlet />
+    </main>
+  </div>
+</div>
